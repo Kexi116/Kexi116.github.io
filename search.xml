@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>记录第一篇博客</title>
+    <url>/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p><strong>作为第一次创建博客的纪念，也作为今后督促我不断更新的证明吧</strong></p>
+<span id="more"></span>
+
+<blockquote>
+<p>千辛万苦，终于搭建好了这个博客，记录下自己的第一次搭建(参考的b站上的视频和网上一些小伙伴，图源网络)</p>
+</blockquote>
+<p><img src="/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/1.jpg" alt="(图源网络)"></p>
+]]></content>
+      <categories>
+        <category>第一次的纪念</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>时间片轮转法</title>
+    <url>/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p><strong>作为学习中的记录，在此记下时间片轮转法的实现过程</strong></p>
+<span id="more"></span>
+
+<h1 id="一、算法简介"><a href="#一、算法简介" class="headerlink" title="一、算法简介"></a>一、算法简介</h1><p>时间片轮转法主要用于分时系统。其基本实现原理是每个进程被分配一个时间段(称为时间片)，当一个进程所拥有的的时间片结束后，仍然在运行时，该进程的CPU将被剥夺给另一个进程；而如果该进程在时间片期间内运行结束，则CPU当即进行切换。</p>
+<p> <img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/1bb6b007188c3698f9a6c54cc7b531f.png" alt="Linux-UNIX系统编程手册上的解释"></p>
+<center style="color:#C0C0C0">Linux-UNIX系统编程手册上的解释</center>
+
+<h1 id="二、实例讲解"><a href="#二、实例讲解" class="headerlink" title="二、实例讲解"></a>二、实例讲解</h1><p>接下来通过一道例题来简单了解算法过程</p>
+<p><strong>考虑5个进程P1,P2,P3,P4,P5,试描述采用时间片轮转调度算法的进程运行情况(假设时间片为1个单位)</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">进程</th>
+<th align="center">创建时间</th>
+<th align="center">运行时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">P1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">P2</td>
+<td align="center">2</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">P3</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">P4</td>
+<td align="center">6</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">P5</td>
+<td align="center">8</td>
+<td align="center">2</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>t=0时刻，P1进程被创建并进入就绪队列，此时没有其他进程，P1处于就绪队列队首，获得时间片，并运行。</p>
+</blockquote>
+<p><strong>就绪队列：P1(3)(默认左边为队首，括号内为剩余运行时间)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719162851695.png" alt="image-20210719162851695"></p>
+<blockquote>
+<p>t=1时刻，此时就绪队列中任然只有P1，且没有其他进程，故此时P1又分到了时间片并运行。</p>
+</blockquote>
+<p><strong>就绪队列：P1(2)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719163149692.png" alt="image-20210719163149692"></p>
+<blockquote>
+<p>t=2时刻，即在P1运行结束之际，我们发现进程P2被创建并进入了就绪态，且P1为执行完毕。这里要提一点，就是关于进程的切换与进程的创建并进入就绪队列的时间比较。这里直接给结论，就是进程的切换往往涉及到保护现场和恢复现场等操作，因此进程之间的切换会比进程创建并进入就绪队列的耗时要多。因此在这里P2会排在就绪队首。</p>
+</blockquote>
+<p><strong>就绪队列：P2(6) P1(1)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719164905121.png" alt="image-20210719164905121"></p>
+<blockquote>
+<p>t=3时刻，P2运行结束且没有其他进程被创建，此时P2被插入到就绪队列末尾，接下来执行P1。</p>
+</blockquote>
+<p><strong>就绪队列：P1(1) P2(5)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165347129.png" alt="image-20210719165347129"></p>
+<blockquote>
+<p>t=4时刻，即P1运行结束时，P3被创建，按照上面的说明，P3优先插入就绪队列末尾，此时P1的剩余运行时间为0，即P1运行结束，不在进入就绪队列。</p>
+</blockquote>
+<p><strong>就绪队列：P2(5) P3(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165832248.png" alt="image-20210719165832248"></p>
+<blockquote>
+<p>t=5时刻，没有其他进程被创建，P2执行完毕后到就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P3(4) P2(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170037515.png" alt="image-20210719170037515"></p>
+<blockquote>
+<p>t=6时刻，进程P4被创建，先于P3插入到就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P2(4) P4(5) P3(3)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170313967.png" alt="image-20210719170313967"></p>
+<blockquote>
+<p>t=7时刻，没有进程被创建，正常执行</p>
+</blockquote>
+<p><strong>就绪队列：P4(5) P3(3) P2(3)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170607246.png" alt="image-20210719170607246"></p>
+<blockquote>
+<p>t=8时刻，进程P5被创建并进入就绪队列，先于P4插入就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P3(3) P2(3) P5(2) P4(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170828567.png" alt="image-20210719170828567"></p>
+<blockquote>
+<p>t=9时刻，P2</p>
+</blockquote>
+<p><strong>就绪队列：P2(3) P5(2) P4(4) P3(2)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171018327.png" alt="image-20210719171018327"></p>
+<blockquote>
+<p>t=10,11,12时刻分别运行进程P5,P4,P3</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171329391.png" alt="image-20210719171329391"></p>
+<blockquote>
+<p>t=13时刻</p>
+</blockquote>
+<p><strong>就绪队列：P2(2) P5(1) P4(3) P3(1)</strong></p>
+<blockquote>
+<p>t=13,14,15,16时刻分别运行进程P2,P5,P4,P3</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719173837856.png" alt="image-20210719173837856"></p>
+<blockquote>
+<p>t=17时刻</p>
+</blockquote>
+<p><strong>就绪队列：P2(1) P4(2)</strong></p>
+<blockquote>
+<p>t=17,18,19分别运行进程P2,P4,P4，而后运行结束，没有其他进程进入。</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719174117273.png" alt="image-20210719174117273"></p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+        <category>进程调度算法</category>
+      </categories>
+      <tags>
+        <tag>时间片轮转法</tag>
+      </tags>
+  </entry>
+</search>

@@ -20,28 +20,48 @@
     var CONFIG = {"hostname":"kexi116.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://kexi116.github.io/index.html">
+  <meta name="description" content="作为学习中的记录，在此记下时间片轮转法的实现过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="时间片轮转法">
+<meta property="og:url" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="作为学习中的记录，在此记下时间片轮转法的实现过程">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/1bb6b007188c3698f9a6c54cc7b531f.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719162851695.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719163149692.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719164905121.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165347129.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165832248.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170037515.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170313967.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170607246.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170828567.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171018327.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171329391.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719173837856.png">
+<meta property="og:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719174117273.png">
+<meta property="article:published_time" content="2021-07-19T02:41:49.000Z">
+<meta property="article:modified_time" content="2021-07-19T10:09:45.841Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="时间片轮转法">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/1bb6b007188c3698f9a6c54cc7b531f.png">
 
-<link rel="canonical" href="https://kexi116.github.io/">
+<link rel="canonical" href="https://kexi116.github.io/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Hexo</title>
+  <title>时间片轮转法 | Hexo</title>
   
 
 
@@ -192,9 +212,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -210,10 +231,9 @@
       <meta itemprop="name" content="Hexo">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">时间片轮转法</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          时间片轮转法
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -250,111 +270,147 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><strong>作为学习中的记录，在此记下时间片轮转法的实现过程</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+        <p><strong>作为学习中的记录，在此记下时间片轮转法的实现过程</strong></p>
+<span id="more"></span>
+
+<h1 id="一、算法简介"><a href="#一、算法简介" class="headerlink" title="一、算法简介"></a>一、算法简介</h1><p>时间片轮转法主要用于分时系统。其基本实现原理是每个进程被分配一个时间段(称为时间片)，当一个进程所拥有的的时间片结束后，仍然在运行时，该进程的CPU将被剥夺给另一个进程；而如果该进程在时间片期间内运行结束，则CPU当即进行切换。</p>
+<p> <img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/1bb6b007188c3698f9a6c54cc7b531f.png" alt="Linux-UNIX系统编程手册上的解释"></p>
+<center style="color:#C0C0C0">Linux-UNIX系统编程手册上的解释</center>
+
+<h1 id="二、实例讲解"><a href="#二、实例讲解" class="headerlink" title="二、实例讲解"></a>二、实例讲解</h1><p>接下来通过一道例题来简单了解算法过程</p>
+<p><strong>考虑5个进程P1,P2,P3,P4,P5,试描述采用时间片轮转调度算法的进程运行情况(假设时间片为1个单位)</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">进程</th>
+<th align="center">创建时间</th>
+<th align="center">运行时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">P1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">P2</td>
+<td align="center">2</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">P3</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">P4</td>
+<td align="center">6</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">P5</td>
+<td align="center">8</td>
+<td align="center">2</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>t=0时刻，P1进程被创建并进入就绪队列，此时没有其他进程，P1处于就绪队列队首，获得时间片，并运行。</p>
+</blockquote>
+<p><strong>就绪队列：P1(3)(默认左边为队首，括号内为剩余运行时间)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719162851695.png" alt="image-20210719162851695"></p>
+<blockquote>
+<p>t=1时刻，此时就绪队列中任然只有P1，且没有其他进程，故此时P1又分到了时间片并运行。</p>
+</blockquote>
+<p><strong>就绪队列：P1(2)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719163149692.png" alt="image-20210719163149692"></p>
+<blockquote>
+<p>t=2时刻，即在P1运行结束之际，我们发现进程P2被创建并进入了就绪态，且P1为执行完毕。这里要提一点，就是关于进程的切换与进程的创建并进入就绪队列的时间比较。这里直接给结论，就是进程的切换往往涉及到保护现场和恢复现场等操作，因此进程之间的切换会比进程创建并进入就绪队列的耗时要多。因此在这里P2会排在就绪队首。</p>
+</blockquote>
+<p><strong>就绪队列：P2(6) P1(1)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719164905121.png" alt="image-20210719164905121"></p>
+<blockquote>
+<p>t=3时刻，P2运行结束且没有其他进程被创建，此时P2被插入到就绪队列末尾，接下来执行P1。</p>
+</blockquote>
+<p><strong>就绪队列：P1(1) P2(5)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165347129.png" alt="image-20210719165347129"></p>
+<blockquote>
+<p>t=4时刻，即P1运行结束时，P3被创建，按照上面的说明，P3优先插入就绪队列末尾，此时P1的剩余运行时间为0，即P1运行结束，不在进入就绪队列。</p>
+</blockquote>
+<p><strong>就绪队列：P2(5) P3(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719165832248.png" alt="image-20210719165832248"></p>
+<blockquote>
+<p>t=5时刻，没有其他进程被创建，P2执行完毕后到就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P3(4) P2(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170037515.png" alt="image-20210719170037515"></p>
+<blockquote>
+<p>t=6时刻，进程P4被创建，先于P3插入到就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P2(4) P4(5) P3(3)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170313967.png" alt="image-20210719170313967"></p>
+<blockquote>
+<p>t=7时刻，没有进程被创建，正常执行</p>
+</blockquote>
+<p><strong>就绪队列：P4(5) P3(3) P2(3)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170607246.png" alt="image-20210719170607246"></p>
+<blockquote>
+<p>t=8时刻，进程P5被创建并进入就绪队列，先于P4插入就绪队列末尾</p>
+</blockquote>
+<p><strong>就绪队列：P3(3) P2(3) P5(2) P4(4)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719170828567.png" alt="image-20210719170828567"></p>
+<blockquote>
+<p>t=9时刻，P2</p>
+</blockquote>
+<p><strong>就绪队列：P2(3) P5(2) P4(4) P3(2)</strong></p>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171018327.png" alt="image-20210719171018327"></p>
+<blockquote>
+<p>t=10,11,12时刻分别运行进程P5,P4,P3</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719171329391.png" alt="image-20210719171329391"></p>
+<blockquote>
+<p>t=13时刻</p>
+</blockquote>
+<p><strong>就绪队列：P2(2) P5(1) P4(3) P3(1)</strong></p>
+<blockquote>
+<p>t=13,14,15,16时刻分别运行进程P2,P5,P4,P3</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719173837856.png" alt="image-20210719173837856"></p>
+<blockquote>
+<p>t=17时刻</p>
+</blockquote>
+<p><strong>就绪队列：P2(1) P4(2)</strong></p>
+<blockquote>
+<p>t=17,18,19分别运行进程P2,P4,P4，而后运行结束，没有其他进程进入。</p>
+</blockquote>
+<p><img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/image-20210719174117273.png" alt="image-20210719174117273"></p>
+
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95/" rel="tag"># 时间片轮转法</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kexi116.github.io/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">记录第一篇博客</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-16 06:26:27" itemprop="dateCreated datePublished" datetime="2021-07-16T06:26:27Z">2021-07-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-19 10:10:54" itemprop="dateModified" datetime="2021-07-19T10:10:54Z">2021-07-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%9A%84%E7%BA%AA%E5%BF%B5/" itemprop="url" rel="index"><span itemprop="name">第一次的纪念</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>作为第一次创建博客的纪念，也作为今后督促我不断更新的证明吧</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/16/%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" rel="prev" title="记录第一篇博客">
+      <i class="fa fa-chevron-left"></i> 记录第一篇博客
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -407,6 +463,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">一、算法简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">二、实例讲解</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
