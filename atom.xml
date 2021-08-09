@@ -6,7 +6,7 @@
   <link href="https://kexi116.github.io/atom.xml" rel="self"/>
   
   <link href="https://kexi116.github.io/"/>
-  <updated>2021-07-20T03:36:02.039Z</updated>
+  <updated>2021-08-09T03:59:37.439Z</updated>
   <id>https://kexi116.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Update、LateUpdate、FixedUpdate比较.md</title>
+    <link href="https://kexi116.github.io/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/"/>
+    <id>https://kexi116.github.io/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/</id>
+    <published>2021-08-08T21:35:10.000Z</published>
+    <updated>2021-08-09T03:59:37.439Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;strong&gt;Update、LateUpdate、FixedUpdate三种函数的比较&lt;/strong&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="游戏开发学习" scheme="https://kexi116.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="Update、LateUpdate、FixedUpdate比较" scheme="https://kexi116.github.io/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E5%AD%A6%E4%B9%A0/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83/"/>
+    
+    
+    <category term="Update" scheme="https://kexi116.github.io/tags/Update/"/>
+    
+    <category term="LateUpdate" scheme="https://kexi116.github.io/tags/LateUpdate/"/>
+    
+    <category term="FixedUpdate" scheme="https://kexi116.github.io/tags/FixedUpdate/"/>
+    
+  </entry>
   
   <entry>
     <title>时间片轮转法</title>
