@@ -165,6 +165,7 @@
 ]]></content>
       <categories>
         <category>游戏开发学习</category>
+        <category>unity学习笔记</category>
         <category>Update、LateUpdate、FixedUpdate比较</category>
       </categories>
       <tags>
@@ -172,5 +173,15 @@
         <tag>LateUpdate</tag>
         <tag>FixedUpdate</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>unity一周学习笔记</title>
+    <url>/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>游戏开发学习</category>
+        <category>unity学习笔记</category>
+        <category>一周学习笔记1</category>
+      </categories>
   </entry>
 </search>
