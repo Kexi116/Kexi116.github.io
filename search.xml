@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Update、LateUpdate、FixedUpdate比较.md</title>
+    <url>/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/</url>
+    <content><![CDATA[<p><strong>Update、LateUpdate、FixedUpdate三种函数的比较</strong></p>
+<span id="more"></span>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>今天在学习游戏开发的过程中遇到了一个很有意思的问题，就是在Update设置摄像机跟随时，每次运行时画面总是会产生抖动，学习后发现给摄像机更改位置要写在LateUpdate中而不是Update。趁此机会也记录下三个Update函数的区别。</p>
+<h2 id="Update"><a href="#Update" class="headerlink" title="Update()"></a><strong>Update()</strong></h2><p>Update()方法应该大家都很熟悉了，Update()方法在游戏运行的每一帧调用一次，比如你的游戏是30帧的，那么Update()方法一秒内就会调用30次。由于每个人的设备性能各不相同，因此Update()并不适合做物理相关的计算，比如你在Update()中实现实时向前方射击一粒子弹，那么不同帧率的设备上的每秒射击的子弹数是不同的。</p>
+<h2 id="FixedUpdate"><a href="#FixedUpdate" class="headerlink" title="FixedUpdate()"></a>FixedUpdate()</h2><p>先看一段官方文档的描述</p>
+<p><a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html</a></p>
+<p><img src="/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/image-20210809110219262.png" alt="image-20210809110219262"></p>
+<p>FixedUpdate()，顾名思义，即每次以一个固定的间隔调用(默认是0.02s)，FixedUpdate()由于其是以固定间隔执行的，故很适合实现一些物理计算(因为要求每秒实现的结果相同)，比如在FixedUpdate()中向rigidbody施加力等。同时要注意到，调用FixedUpdate()的频率可能比Update()高或者低。当应用程序只有25帧时，FixedUpdate()将会每帧调用两次，而当应用程序有100帧时，一次FixedUpdate()可能会导致两次的帧渲染。</p>
+<h2 id="LateUpdate"><a href="#LateUpdate" class="headerlink" title="LateUpdate()"></a><strong>LateUpdate()</strong></h2><p>同样先看一段文档描述</p>
+<p><a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html">https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html</a></p>
+<p><img src="/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/image-20210809110836539.png" alt="image-20210809110836539"></p>
+<p>LateUpdate()也是顾名思义，晚于Update()调用，即在应用程序运行过程中，LateUpdate()总是等到所有的Update()执行完毕后再执行。因此如果想处理一些等到Update()执行完毕后的事时，就可以使用LateUpdate()。比如摄像机位置的变换，如果将位置的变换写在Update()那么视角就会产生抖动现象，因为跟踪目标是在每一个Update()期间进行的变换，如果每一次Update()期间目标都在变换位置，那么自然摄像机会随着会产生抖动现象。</p>
+<p><strong>同时，在网上搜集资料时我还发现控制动画的代码也要写在LateUpdate()，这里由于本人还未学习Unity里的动画，暂时算挖个坑等后面学了之后再再填吧。</strong></p>
+<p><font size="3">参考资料：</font></p>
+<p><font size="2">[1] <a href="https://www.codinblack.com/the-difference-between-update-fixedupdate-and-lateupdate/">https://www.codinblack.com/the-difference-between-update-fixedupdate-and-lateupdate/</a></font></p>
+<p><font size="2">[2]<a href="https://cobesign.wang/index.php/zh-tw/learningnote/unitynotebook/item/15-update-lateupdate-fixedupdate">https://cobesign.wang/index.php/zh-tw/learningnote/unitynotebook/item/15-update-lateupdate-fixedupdate</a></font></p>
+<p><font size="2">[3]<a href="https://answers.unity.com/questions/10189/what-is-the-general-use-of-awake-start-update-fixe.html">https://answers.unity.com/questions/10189/what-is-the-general-use-of-awake-start-update-fixe.html</a></font></p>
+<p><font size="2">[4]<a href="https://answers.unity.com/questions/1384304/climb-animation-in-update-or-fixedupdate-or-lateup.html">https://answers.unity.com/questions/1384304/climb-animation-in-update-or-fixedupdate-or-lateup.html</a></font></p>
+]]></content>
+      <categories>
+        <category>游戏开发学习</category>
+        <category>unity学习笔记</category>
+        <category>Update、LateUpdate、FixedUpdate比较</category>
+      </categories>
+      <tags>
+        <tag>Update</tag>
+        <tag>LateUpdate</tag>
+        <tag>FixedUpdate</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>unity一周学习笔记</title>
+    <url>/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p><strong>跟着油管上学习的塔防游戏，用到的一些unity内容的笔记</strong></p>
+<span id="more"></span>
+
+<p><font color="red"><strong>注：文章内Unity版本：Unity2019.4.18f1c1</strong></font></p>
+<h2 id="Unity操作部分"><a href="#Unity操作部分" class="headerlink" title="Unity操作部分"></a>Unity操作部分</h2><p><strong>1、Unity里将物体定位到眼前快捷键</strong> ：ctrl+alt+f<br><strong>2、Unity里快速找到物体位置快捷键</strong> ：shif+f<br><strong>3、unity里选中多个连续物体：</strong>鼠标先选中一个 物体，之后鼠标移动到要选中的连续物体的最后一个，同时按下按下 shift和左键。即可选中多个连续物体。<br><strong>4、选中父物体的所有子物体：</strong>选中父物体后同时按下shift+c</p>
+<h2 id="C-知识部分"><a href="#C-知识部分" class="headerlink" title="C#知识部分"></a><strong>C#知识部分</strong></h2><h4 id="1、Unity-中Input-getAxis和Input-getAxisRaw的区别"><a href="#1、Unity-中Input-getAxis和Input-getAxisRaw的区别" class="headerlink" title="1、Unity 中Input.getAxis和Input.getAxisRaw的区别"></a><strong>1、Unity 中Input.getAxis和Input.getAxisRaw的区别</strong></h4><p>unity文档中两个的描述如下：</p>
+<p>关于虚拟轴怎么查看：</p>
+<p><img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130170409021.png" alt="image-20220130170409021"></p>
+<p>左上角Edit-&gt;Project Settings-&gt;Input Manager即可查看到对应的名称</p>
+<img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130171108856.png" alt="image-20220130171108856" style="zoom:80%;">
+
+<p>撰写脚本代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void Update()</span><br><span class="line">&#123;</span><br><span class="line">    x = Input.GetAxis(&quot;Horizontal&quot;);</span><br><span class="line">    y = Input.GetAxis(&quot;Vertical&quot;);</span><br><span class="line">    Debug.Log(x);</span><br><span class="line">    Debug.Log(y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取对应的水平和竖直虚拟轴的输入</p>
+<p>挂载到物体后运行查看结果如下：<br><img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130170025791.png" alt="image-20220130170025791"></p>
+<p>可以看到一开始数字是0，当按下方向键或者wasd后出现了对应的小数</p>
+<p>更改上述脚本如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void Update()</span><br><span class="line">&#123;</span><br><span class="line">    x = Input.GetAxisRaw(&quot;Horizontal&quot;);</span><br><span class="line">    y = Input.GetAxisRaw(&quot;Vertical&quot;);</span><br><span class="line">    Debug.Log(x);</span><br><span class="line">    Debug.Log(y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130171241204.png" alt="image-20220130171241204"> </p>
+<p>可以看到两者的区别在于GetAxisRaw获取的虚拟轴的输入是没有平滑过渡的，即只有0，-1，1三个结果</p>
+<p>而GetAxis获取的虚拟轴有平滑过渡，会输出小数。</p>
+<h4 id="2-Mathf-floor，Mathf-Round和Mathf-Clamp"><a href="#2-Mathf-floor，Mathf-Round和Mathf-Clamp" class="headerlink" title="2.Mathf.floor，Mathf.Round和Mathf.Clamp"></a>2.Mathf.floor，Mathf.Round和Mathf.Clamp</h4><p><img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130172102390.png" alt="image-20220130172102390"> </p>
+<p>返回小于或者等于f的最大整数</p>
+<img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130172148016.png" alt="image-20220130172148016" style="zoom:100%;" align="left">
+
+<p>返回最接近f的整数</p>
+<p><font color="blue"><strong>这里需要注意，如果f是X.5，例如0.5,1.5,2.5</strong></font></p>
+<p><font color="blue"><em><strong>那么会返回最接近f的偶数</strong></em></font></p>
+<p><font color="blue"><em><strong>上述三个数的返回结果分别为0,2,2</strong></em></font></p>
+<p><img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220130172902715.png" alt="image-20220130172902715"></p>
+<p>返回介于min和max之间的值，若value超出这个范围，则取上下界</p>
+<h4 id="3-Invoke-和InvokeRepeating"><a href="#3-Invoke-和InvokeRepeating" class="headerlink" title="3.Invoke()和InvokeRepeating()"></a>3.Invoke()和InvokeRepeating()</h4><p>public void <strong>Invoke</strong>(string <strong>methodName</strong>, float <strong>time</strong>);</p>
+<p>public void <strong>InvokeRepeating</strong>(string <strong>methodName</strong>, float <strong>time</strong>, float <strong>repeatRate</strong>)</p>
+<p>两者都是经过time时间后调用methodName函数，一开始调用的函数不会收到Time.Scale影响</p>
+<p>**InvokeRepeating()**每隔repeatRate后会再次调用methodName函数，且调用该函数的时间会受到Time.scale的影响</p>
+<p><strong>4.[Header(“”)]</strong></p>
+<p>用于给字段添加人工分类</p>
+<p>编写脚本如下：</p>
+<img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220203214539400.png" alt="image-20220203214539400" style="zoom:75%;" align="left">
+
+<p>效果如下：</p>
+<img src="/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20220203214755096.png" alt="image-20220203214755096" style="zoom:67%;" align="left">
+]]></content>
+      <categories>
+        <category>游戏开发学习</category>
+        <category>unity学习笔记</category>
+        <category>一周学习笔记1</category>
+      </categories>
+  </entry>
+  <entry>
     <title>时间片轮转法</title>
     <url>/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p><strong>作为学习中的记录，在此记下时间片轮转法的实现过程</strong></p>
@@ -138,50 +226,6 @@
 ]]></content>
       <categories>
         <category>第一次的纪念</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Update、LateUpdate、FixedUpdate比较.md</title>
-    <url>/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/</url>
-    <content><![CDATA[<p><strong>Update、LateUpdate、FixedUpdate三种函数的比较</strong></p>
-<span id="more"></span>
-
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>今天在学习游戏开发的过程中遇到了一个很有意思的问题，就是在Update设置摄像机跟随时，每次运行时画面总是会产生抖动，学习后发现给摄像机更改位置要写在LateUpdate中而不是Update。趁此机会也记录下三个Update函数的区别。</p>
-<h2 id="Update"><a href="#Update" class="headerlink" title="Update()"></a><strong>Update()</strong></h2><p>Update()方法应该大家都很熟悉了，Update()方法在游戏运行的每一帧调用一次，比如你的游戏是30帧的，那么Update()方法一秒内就会调用30次。由于每个人的设备性能各不相同，因此Update()并不适合做物理相关的计算，比如你在Update()中实现实时向前方射击一粒子弹，那么不同帧率的设备上的每秒射击的子弹数是不同的。</p>
-<h2 id="FixedUpdate"><a href="#FixedUpdate" class="headerlink" title="FixedUpdate()"></a>FixedUpdate()</h2><p>先看一段官方文档的描述</p>
-<p><a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html</a></p>
-<p><img src="/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/image-20210809110219262.png" alt="image-20210809110219262"></p>
-<p>FixedUpdate()，顾名思义，即每次以一个固定的间隔调用(默认是0.02s)，FixedUpdate()由于其是以固定间隔执行的，故很适合实现一些物理计算(因为要求每秒实现的结果相同)，比如在FixedUpdate()中向rigidbody施加力等。同时要注意到，调用FixedUpdate()的频率可能比Update()高或者低。当应用程序只有25帧时，FixedUpdate()将会每帧调用两次，而当应用程序有100帧时，一次FixedUpdate()可能会导致两次的帧渲染。</p>
-<h2 id="LateUpdate"><a href="#LateUpdate" class="headerlink" title="LateUpdate()"></a><strong>LateUpdate()</strong></h2><p>同样先看一段文档描述</p>
-<p><a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html">https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html</a></p>
-<p><img src="/2021/08/09/Update%E3%80%81LateUpdate%E3%80%81FixedUpdate%E6%AF%94%E8%BE%83-md/image-20210809110836539.png" alt="image-20210809110836539"></p>
-<p>LateUpdate()也是顾名思义，晚于Update()调用，即在应用程序运行过程中，LateUpdate()总是等到所有的Update()执行完毕后再执行。因此如果想处理一些等到Update()执行完毕后的事时，就可以使用LateUpdate()。比如摄像机位置的变换，如果将位置的变换写在Update()那么视角就会产生抖动现象，因为跟踪目标是在每一个Update()期间进行的变换，如果每一次Update()期间目标都在变换位置，那么自然摄像机会随着会产生抖动现象。</p>
-<p><strong>同时，在网上搜集资料时我还发现控制动画的代码也要写在LateUpdate()，这里由于本人还未学习Unity里的动画，暂时算挖个坑等后面学了之后再再填吧。</strong></p>
-<p><font size="3">参考资料：</font></p>
-<p><font size="2">[1] <a href="https://www.codinblack.com/the-difference-between-update-fixedupdate-and-lateupdate/">https://www.codinblack.com/the-difference-between-update-fixedupdate-and-lateupdate/</a></font></p>
-<p><font size="2">[2]<a href="https://cobesign.wang/index.php/zh-tw/learningnote/unitynotebook/item/15-update-lateupdate-fixedupdate">https://cobesign.wang/index.php/zh-tw/learningnote/unitynotebook/item/15-update-lateupdate-fixedupdate</a></font></p>
-<p><font size="2">[3]<a href="https://answers.unity.com/questions/10189/what-is-the-general-use-of-awake-start-update-fixe.html">https://answers.unity.com/questions/10189/what-is-the-general-use-of-awake-start-update-fixe.html</a></font></p>
-<p><font size="2">[4]<a href="https://answers.unity.com/questions/1384304/climb-animation-in-update-or-fixedupdate-or-lateup.html">https://answers.unity.com/questions/1384304/climb-animation-in-update-or-fixedupdate-or-lateup.html</a></font></p>
-]]></content>
-      <categories>
-        <category>游戏开发学习</category>
-        <category>unity学习笔记</category>
-        <category>Update、LateUpdate、FixedUpdate比较</category>
-      </categories>
-      <tags>
-        <tag>Update</tag>
-        <tag>LateUpdate</tag>
-        <tag>FixedUpdate</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>unity一周学习笔记</title>
-    <url>/2022/01/31/unity%E4%B8%80%E5%91%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>游戏开发学习</category>
-        <category>unity学习笔记</category>
-        <category>一周学习笔记1</category>
       </categories>
   </entry>
 </search>
