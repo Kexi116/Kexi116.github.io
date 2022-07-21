@@ -29,7 +29,7 @@
 <meta property="og:description" content="今天在做自己的软渲染器的时候遇到的问题">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-07-19T21:11:28.000Z">
-<meta property="article:modified_time" content="2022-07-19T13:36:20.047Z">
+<meta property="article:modified_time" content="2022-07-21T14:39:44.453Z">
 <meta property="article:tag" content="软渲染器">
 <meta name="twitter:card" content="summary">
 
@@ -222,10 +222,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-07-19 21:11:28 / 修改时间：13:36:20" itemprop="dateCreated datePublished" datetime="2022-07-19T21:11:28Z">2022-07-19</time>
+              <time title="创建时间：2022-07-19 21:11:28" itemprop="dateCreated datePublished" datetime="2022-07-19T21:11:28Z">2022-07-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-21 14:39:44" itemprop="dateModified" datetime="2022-07-21T14:39:44Z">2022-07-21</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -270,7 +276,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>762</span>
+              <span>713</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -291,23 +297,27 @@
       
         <p><strong>今天在做自己的软渲染器的时候遇到的问题</strong></p>
 <span id="more"></span>
-
 <p>一开始我自己实现的透视除法是将向量所有的值都除以w，即最后的w是1，然后应用视口变换矩阵将坐标变换到屏幕空间。即</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v /= v.w;</span><br><span class="line">v.w = 1.f;</span><br></pre></td></tr></table></figure>
-
 <p>后面当我在使用透视矫正时需要使用到原来坐标的深度，因为投影变换后的w=-z，因此w不能除，要留下来，于是乎代码变成这样</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v.x /= v.w;</span><br><span class="line">v.y /= v.w;</span><br><span class="line">v.z /= v.w;</span><br></pre></td></tr></table></figure>
-
 <p>后面再用这个坐标去乘以视口变换矩阵，这时候问题来了，视口变换如果我们照常写的话，其实就是将</p>
 <p>x,y从 [-1,1]映射到[0,width],[0,height]，即</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v.x = 0.5 * width  * (v.x + 1.0);</span><br><span class="line">v.y = 0.5 * height * (v.y + 1.0);</span><br></pre></td></tr></table></figure>
-
 <p>非常简单是吧</p>
-<p>可是好死不死，我就想用视口变换矩阵，来装逼，众所周知，视口变换矩阵如下:<br>$$<br>\left<br>[\begin{matrix}<br>w/2&amp;0 &amp;0&amp;w/2\<br>0&amp;h/2&amp;0&amp;h/2\<br>0&amp;0&amp;1&amp;0\<br>0&amp;0&amp;0&amp;1<br>\end{matrix}<br>\right]<br>$$<br>看着没问题啊，带入正常的(x,y,z,1)也能计算出结果啊。</p>
+<p>可是好死不死，我就想用视口变换矩阵，来装逼，众所周知，视口变换矩阵如下:</p>
+<script type="math/tex; mode=display">
+\left
+[\begin{matrix}
+w/2&0 &0&w/2\\
+0&h/2&0&h/2\\
+0&0&1&0\\
+0&0&0&1 
+\end{matrix}
+\right]</script><p>看着没问题啊，带入正常的(x,y,z,1)也能计算出结果啊。</p>
 <p>可是 要知道这个矩阵的最后一列不是全0! 是有值的!! 如果你的w值不是1的话，是会被影响到的。</p>
 <p>举个例子 (x,y,z,2)，与上面的矩阵相乘可得到：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v.x = w/2*v.x+w = 0.5 * width  * (v.x + 2.0)</span><br><span class="line">v.y = h/2*v.y+h = 0.5 * height * (v.y + 2.0)</span><br></pre></td></tr></table></figure>
-
 <p>发现了没有，后面的数字变了，也就是说变换坐标被改变了，所以说要想保留w的话，还是老老实实用数学公式吧，视口变换矩阵的前提是w等于1.</p>
 <p>归根到底，这个问题还是我平时不老实，没有理解深入就使用的结果。希望大家以后也能注意吧</p>
 
@@ -316,23 +326,6 @@
     
     
     
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://kexi116.github.io/2022/07/20/%E8%A7%86%E5%8F%A3%E7%9F%A9%E9%98%B5%E5%BA%94%E7%94%A8%E4%B9%8Bw%E7%9A%84%E5%BD%B1%E5%93%8D/" title="视口矩阵应用之w的影响">https://kexi116.github.io/2022/07/20/视口矩阵应用之w的影响/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
 
       <footer class="post-footer">
           <div class="post-tags">
@@ -564,6 +557,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -233,23 +233,27 @@
     <url>/2022/07/20/%E8%A7%86%E5%8F%A3%E7%9F%A9%E9%98%B5%E5%BA%94%E7%94%A8%E4%B9%8Bw%E7%9A%84%E5%BD%B1%E5%93%8D/</url>
     <content><![CDATA[<p><strong>今天在做自己的软渲染器的时候遇到的问题</strong></p>
 <span id="more"></span>
-
 <p>一开始我自己实现的透视除法是将向量所有的值都除以w，即最后的w是1，然后应用视口变换矩阵将坐标变换到屏幕空间。即</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">v /= v.w;</span><br><span class="line">v.w = 1.f;</span><br></pre></td></tr></table></figure>
-
 <p>后面当我在使用透视矫正时需要使用到原来坐标的深度，因为投影变换后的w=-z，因此w不能除，要留下来，于是乎代码变成这样</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">v.x /= v.w;</span><br><span class="line">v.y /= v.w;</span><br><span class="line">v.z /= v.w;</span><br></pre></td></tr></table></figure>
-
 <p>后面再用这个坐标去乘以视口变换矩阵，这时候问题来了，视口变换如果我们照常写的话，其实就是将</p>
 <p>x,y从 [-1,1]映射到[0,width],[0,height]，即</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">v.x = 0.5 * width  * (v.x + 1.0);</span><br><span class="line">v.y = 0.5 * height * (v.y + 1.0);</span><br></pre></td></tr></table></figure>
-
 <p>非常简单是吧</p>
-<p>可是好死不死，我就想用视口变换矩阵，来装逼，众所周知，视口变换矩阵如下:<br>$$<br>\left<br>[\begin{matrix}<br>w/2&amp;0 &amp;0&amp;w/2\<br>0&amp;h/2&amp;0&amp;h/2\<br>0&amp;0&amp;1&amp;0\<br>0&amp;0&amp;0&amp;1<br>\end{matrix}<br>\right]<br>$$<br>看着没问题啊，带入正常的(x,y,z,1)也能计算出结果啊。</p>
+<p>可是好死不死，我就想用视口变换矩阵，来装逼，众所周知，视口变换矩阵如下:</p>
+<script type="math/tex; mode=display">
+\left
+[\begin{matrix}
+w/2&0 &0&w/2\\
+0&h/2&0&h/2\\
+0&0&1&0\\
+0&0&0&1 
+\end{matrix}
+\right]</script><p>看着没问题啊，带入正常的(x,y,z,1)也能计算出结果啊。</p>
 <p>可是 要知道这个矩阵的最后一列不是全0! 是有值的!! 如果你的w值不是1的话，是会被影响到的。</p>
 <p>举个例子 (x,y,z,2)，与上面的矩阵相乘可得到：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">v.x = w/2*v.x+w = 0.5 * width  * (v.x + 2.0)</span><br><span class="line">v.y = h/2*v.y+h = 0.5 * height * (v.y + 2.0)</span><br></pre></td></tr></table></figure>
-
 <p>发现了没有，后面的数字变了，也就是说变换坐标被改变了，所以说要想保留w的话，还是老老实实用数学公式吧，视口变换矩阵的前提是w等于1.</p>
 <p>归根到底，这个问题还是我平时不老实，没有理解深入就使用的结果。希望大家以后也能注意吧</p>
 ]]></content>
@@ -265,36 +269,121 @@
     <url>/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/</url>
     <content><![CDATA[<p><strong>谈谈自己的理解</strong></p>
 <span id="more"></span>
-
 <p><strong>前言：本文为本人学习图形学中记录所得，难免会有所错误。如有发现，请联系本人纠正。</strong></p>
 <p><strong>一、序言</strong></p>
 <p>旋转，平移，缩放作为3D图形中的基本操作，按照正确的顺序执行能够得到任何想要的效果，然而，若顺序不当，则会造成很多意想不到的结果，且难以发现出错位置。本文便是从矩阵的角度，以我个人所学，阐述旋转，平移，缩放执行顺序背后的原理。</p>
 <p><strong>二、开始</strong></p>
 <p><strong>1、平移和缩放</strong></p>
 <p>我们先从两个最简单的变换开始。</p>
-<p>我们知道，在图形学中图形的变换是通过矩阵来实现的，对应的<strong>平移</strong>和<strong>缩放</strong>矩阵，<strong>物体坐标</strong>如下：<br>$$<br>\left<br>[\begin{matrix}<br>1 &amp; 0 &amp; 0 &amp; Tx\<br>0 &amp; 1 &amp; 0 &amp; Ty\<br>0 &amp; 0 &amp; 1 &amp; Tz\<br>0 &amp; 0 &amp; 0 &amp; 1<br>\end{matrix}<br>\right]</p>
-<p>\qquad<br>\left<br>[\begin{matrix}<br>Sx &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; Sy &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; Sz &amp; 0\<br>0 &amp; 0 &amp; 0   &amp; 1<br>\end{matrix}<br>\right]<br>\qquad<br>\left<br>[\begin{matrix}<br>x\<br>y\<br>z\<br>1<br>\end{matrix}<br>\right]<br>$$<br>我们记物体的原始坐标为Ps，结果坐标为Pd，平移矩阵为Mt，缩放矩阵为Ms，旋转矩阵为Mr。那么变换就有两种写法：</p>
-<p><strong>（1）Mt * Ms * Ps</strong></p>
-<p>即先进行缩放，在进行平移，让我们看看这样会发生什么，计算可得：<br>$$<br>Pd =<br>\left<br>[\begin{matrix}<br>x<em>Sx + Tx\<br>y</em>Sy+Ty\<br>z*Sz+Tz\<br>1<br>\end{matrix}<br>\right]<br>$$<br>可以看到，这个组合对物体进行了缩放，同时达到了平移的效果。</p>
-<p><strong>（2）Ms * Mt * Ps</strong></p>
-<p>即先进行平移，在进行缩放，计算可得：<br>$$<br>Pd=<br>\left<br>[\begin<br>{matrix}<br>Sx*(x + Tx)\<br>Sy*(y+Ty)\<br>Sz*(z+Tz)\<br>1<br>\end<br>{matrix}\right]<br>$$<br>可以看到先平移在缩放后，平移的向量也会被进行缩放</p>
+<p>我们知道，在图形学中图形的变换是通过矩阵来实现的，对应的<strong>平移</strong>和<strong>缩放</strong>矩阵，<strong>物体坐标</strong>如下：</p>
+<script type="math/tex; mode=display">
+\left
+[\begin{matrix}
+1 & 0 & 0 & Tx\\
+0 & 1 & 0 & Ty\\
+0 & 0 & 1 & Tz\\
+0 & 0 & 0 & 1
+\end{matrix}
+\right]
+
+\qquad
+\left
+[\begin{matrix}
+Sx & 0 & 0 & 0\\
+0 & Sy & 0 & 0\\
+0 & 0 & Sz & 0\\
+0 & 0 & 0   & 1
+\end{matrix}
+\right]
+\qquad
+\left
+[\begin{matrix}
+x\\
+y\\
+z\\
+1 
+\end{matrix}
+\right]</script><p>我们记物体的原始坐标为Ps，结果坐标为Pd，平移矩阵为Mt，缩放矩阵为Ms，旋转矩阵为Mr。那么变换就有两种写法：</p>
+<p><strong>（1）Mt <em> Ms </em> Ps</strong></p>
+<p>即先进行缩放，在进行平移，让我们看看这样会发生什么，计算可得：</p>
+<script type="math/tex; mode=display">
+Pd =
+\left
+[\begin{matrix}
+x*Sx + Tx\\
+y*Sy+Ty\\
+z*Sz+Tz\\
+1 
+\end{matrix}
+\right]</script><p>可以看到，这个组合对物体进行了缩放，同时达到了平移的效果。</p>
+<p><strong>（2）Ms <em> Mt </em> Ps</strong></p>
+<p>即先进行平移，在进行缩放，计算可得：</p>
+<script type="math/tex; mode=display">
+Pd=
+\left
+[\begin
+{matrix}
+Sx*(x + Tx)\\
+Sy*(y+Ty)\\
+Sz*(z+Tz)\\
+1 
+\end
+{matrix}\right]</script><p>可以看到先平移在缩放后，平移的向量也会被进行缩放</p>
 <p><strong>2、平移和旋转</strong></p>
-<p>我们以右手坐标系围绕z轴旋转θ°为例，还是跟上面一样，对应的平移矩阵和旋转矩阵如下：<br>$$<br>\left<br>[\begin{matrix}<br>1 &amp; 0 &amp; 0 &amp; Tx\<br>0 &amp; 1 &amp; 0 &amp; Ty\<br>0 &amp; 0 &amp; 1 &amp; Tz\<br>0 &amp; 0 &amp; 0 &amp; 1<br>\end{matrix}<br>\right]</p>
-<p>\qquad<br>\left<br>[\begin{matrix}<br>cosθ &amp; -sinθ &amp; 0 &amp; 0\<br>sinθ &amp; cosθ &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 1 &amp; 0\<br>0 &amp; 0 &amp; 0   &amp; 1<br>\end{matrix}<br>\right]<br>$$<br>同样有两种写法：</p>
-<p><strong>（1）Mt * Mr * Ps</strong></p>
-<p>即先进行旋转，再进行平移，计算可得：<br>$$<br>Pd =<br>\left<br>[\begin{matrix}<br>x<em>cosθ-y</em>sinθ+Tx\<br>x<em>sinθ+y</em>cosθ+Ty &amp;\<br>z+Tz &amp;\<br>1 &amp;<br>\end{matrix}<br>\right]<br>$$<br><strong>（2）Mr * Mt * Ps</strong></p>
-<p>先进行平移，在进行旋转，计算可得：<br>$$<br>Pd =<br>\left<br>[\begin{matrix}<br>(x+Tx)*cosθ-(y+Ty)*sinθ\<br>(x+Tx)*sinθ+(y+Ty)*cosθ\<br>z+Tz &amp;\<br>1 &amp;<br>\end{matrix}<br>\right]<br>$$<br>假设过原点有一条直线(黄色)，我们希望将其变到另一个位置(棕色)，由图上可知，我们需要进行旋转和平移变换。</p>
-<p><img src="/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/blog\source_posts\旋转、平移、缩放顺序\image-20220716181243948.png" alt="image-20220716181243948"></p>
+<p>我们以右手坐标系围绕z轴旋转θ°为例，还是跟上面一样，对应的平移矩阵和旋转矩阵如下：</p>
+<script type="math/tex; mode=display">
+\left
+[\begin{matrix}
+1 & 0 & 0 & Tx\\
+0 & 1 & 0 & Ty\\
+0 & 0 & 1 & Tz\\
+0 & 0 & 0 & 1
+\end{matrix}
+\right]
+
+\qquad
+\left
+[\begin{matrix}
+cosθ & -sinθ & 0 & 0\\
+sinθ & cosθ & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0   & 1
+\end{matrix}
+\right]</script><p>同样有两种写法：</p>
+<p><strong>（1）Mt <em> Mr </em> Ps</strong></p>
+<p>即先进行旋转，再进行平移，计算可得：</p>
+<script type="math/tex; mode=display">
+Pd =
+\left
+[\begin{matrix}
+x*cosθ-y*sinθ+Tx\\
+x*sinθ+y*cosθ+Ty &\\
+z+Tz &\\
+1 &
+\end{matrix}
+\right]</script><p><strong>（2）Mr <em> Mt </em> Ps</strong></p>
+<p>先进行平移，在进行旋转，计算可得：</p>
+<script type="math/tex; mode=display">
+Pd =
+\left
+[\begin{matrix}
+(x+Tx)*cosθ-(y+Ty)*sinθ\\
+(x+Tx)*sinθ+(y+Ty)*cosθ\\
+z+Tz &\\
+1 &
+\end{matrix}
+\right]</script><p>假设过原点有一条直线(黄色)，我们希望将其变到另一个位置(棕色)，由图上可知，我们需要进行旋转和平移变换。</p>
+<p><img src="/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/image-20220716181243948.png" alt="image-20220716181243948"></p>
 <p>我们假设一开始直线的两点分别为(1,1)和(-1,-1)，平移向量为(1,1,0,1)，沿z轴逆时针旋转90°</p>
 <p>那么上面的两个矩阵计算结果分别为</p>
-<p><strong>Mt * Mr * Ps</strong></p>
+<p><strong>Mt <em> Mr </em> Ps</strong></p>
 <p>(1,1)-&gt;(0,2)     (-1,-1)-&gt;(2,0)</p>
-<p><strong>Mr * Mt * Ps</strong></p>
+<p><strong>Mr <em> Mt </em> Ps</strong></p>
 <p>(1,1)-&gt;(-2,2)    (-1,-1)-&gt;(0,0)</p>
 <p>可以看到先旋转后平移是可以得到我们想要的结果的。</p>
 <p><strong>那么为什么先平移后旋转得到的结果会有所不一样呢？</strong></p>
 <p>我们不妨先把图画出来</p>
-<p><img src="/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/blog\source_posts\旋转、平移、缩放顺序\image-20220716181953076.png" alt="image-20220716181953076"></p>
+<p><img src="/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/image-20220716181953076.png" alt="image-20220716181953076"></p>
 <p>可以看到，旋转方向是转对了，但是平移位置却错了。</p>
 <p>这其实就要牵涉到旋转矩阵的推导了，其实在推导旋转矩阵时，我们是用的绕坐标轴旋转的形式推导的，也就是说图像什么时候应用旋转矩阵，也就意味着图像什么时候绕坐标轴旋转。</p>
 ]]></content>
