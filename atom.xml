@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>鱼啊鱼的个人博客</title>
+  <title>蜜柑的个人博客</title>
   <icon>https://kexi116.github.io/icon.png</icon>
   
   <link href="https://kexi116.github.io/atom.xml" rel="self"/>
   
   <link href="https://kexi116.github.io/"/>
-  <updated>2022-07-19T13:35:40.845Z</updated>
+  <updated>2022-07-19T13:36:20.047Z</updated>
   <id>https://kexi116.github.io/</id>
-  
-  <author>
-    <name>鱼啊鱼</name>
-    
-  </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
   
@@ -21,10 +16,10 @@
     <link href="https://kexi116.github.io/2022/07/20/%E8%A7%86%E5%8F%A3%E7%9F%A9%E9%98%B5%E5%BA%94%E7%94%A8%E4%B9%8Bw%E7%9A%84%E5%BD%B1%E5%93%8D/"/>
     <id>https://kexi116.github.io/2022/07/20/%E8%A7%86%E5%8F%A3%E7%9F%A9%E9%98%B5%E5%BA%94%E7%94%A8%E4%B9%8Bw%E7%9A%84%E5%BD%B1%E5%93%8D/</id>
     <published>2022-07-19T21:11:28.000Z</published>
-    <updated>2022-07-19T13:35:40.845Z</updated>
+    <updated>2022-07-19T13:36:20.047Z</updated>
     
     
-    <summary type="html">&lt;p&gt;今天在做自己的软渲染器的时候遇到的问题&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;&lt;strong&gt;今天在做自己的软渲染器的时候遇到的问题&lt;/strong&gt;&lt;/p&gt;</summary>
     
     
     
@@ -40,18 +35,10 @@
     <link href="https://kexi116.github.io/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/"/>
     <id>https://kexi116.github.io/2022/07/16/%E6%97%8B%E8%BD%AC%E3%80%81%E5%B9%B3%E7%A7%BB%E3%80%81%E7%BC%A9%E6%94%BE%E9%A1%BA%E5%BA%8F/</id>
     <published>2022-07-16T15:52:01.000Z</published>
-    <updated>2022-07-19T13:33:28.739Z</updated>
+    <updated>2022-07-19T13:36:43.170Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;&lt;strong&gt;前言：本文为本人学习图形学中记录所得，难免会有所错误。如有发现，请联系本人纠正。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;一、序言&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;旋转，平移，缩放作为3D图形中的基本操作，按照正确的顺序执行能够得到任何想要的效果，然</summary>
-        
-      
+    <summary type="html">&lt;p&gt;&lt;strong&gt;谈谈自己的理解&lt;/strong&gt;&lt;/p&gt;</summary>
     
     
     
