@@ -10,5 +10,5 @@ Disallow: /css/
 Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
-Sitemap: http://kexi116.github.io/.github.io/sitemap.xml
-Sitemap: http://kexi116.github.io/baidusitemap.xml
+Sitemap: https://kexi116.github.io/sitemap.xml
+Sitemap: https://kexi116.github.io/baidusitemap.xml

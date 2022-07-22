@@ -316,47 +316,50 @@
       
         <p><strong>作为学习中的记录，在此记下时间片轮转法的实现过程</strong></p>
 <span id="more"></span>
-
 <h1 id="一、算法简介"><a href="#一、算法简介" class="headerlink" title="一、算法简介"></a>一、算法简介</h1><p>时间片轮转法主要用于分时系统。其基本实现原理是每个进程被分配一个时间段(称为时间片)，当一个进程所拥有的的时间片结束后，仍然在运行时，该进程的CPU将被剥夺给另一个进程；而如果该进程在时间片期间内运行结束，则CPU当即进行切换。</p>
 <p> <img src="/2021/07/19/%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC%E6%B3%95%E4%BB%8B%E7%BB%8D/1bb6b007188c3698f9a6c54cc7b531f.png" alt="Linux-UNIX系统编程手册上的解释"></p>
 <center style="color:#C0C0C0">Linux-UNIX系统编程手册上的解释</center>
 
 <h1 id="二、实例讲解"><a href="#二、实例讲解" class="headerlink" title="二、实例讲解"></a>二、实例讲解</h1><p>接下来通过一道例题来简单了解算法过程</p>
 <p><strong>考虑5个进程P1,P2,P3,P4,P5,试描述采用时间片轮转调度算法的进程运行情况(假设时间片为1个单位)</strong></p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">进程</th>
-<th align="center">创建时间</th>
-<th align="center">运行时间</th>
+<th style="text-align:center">进程</th>
+<th style="text-align:center">创建时间</th>
+<th style="text-align:center">运行时间</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">P1</td>
-<td align="center">0</td>
-<td align="center">3</td>
+<tbody>
+<tr>
+<td style="text-align:center">P1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">3</td>
 </tr>
 <tr>
-<td align="center">P2</td>
-<td align="center">2</td>
-<td align="center">6</td>
+<td style="text-align:center">P2</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">6</td>
 </tr>
 <tr>
-<td align="center">P3</td>
-<td align="center">4</td>
-<td align="center">4</td>
+<td style="text-align:center">P3</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">4</td>
 </tr>
 <tr>
-<td align="center">P4</td>
-<td align="center">6</td>
-<td align="center">5</td>
+<td style="text-align:center">P4</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">5</td>
 </tr>
 <tr>
-<td align="center">P5</td>
-<td align="center">8</td>
-<td align="center">2</td>
+<td style="text-align:center">P5</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">2</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <blockquote>
 <p>t=0时刻，P1进程被创建并进入就绪队列，此时没有其他进程，P1处于就绪队列队首，获得时间片，并运行。</p>
 </blockquote>
@@ -585,7 +588,7 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">6k</span>
+    <span title="站点总字数">7k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
